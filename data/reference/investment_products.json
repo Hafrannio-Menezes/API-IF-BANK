@@ -1,0 +1,42 @@
+[
+  {
+    "name": "CDB Liquidez Diaria",
+    "product_type": "CDB",
+    "annual_rate": "12.5000",
+    "minimum_initial_amount": "100.00",
+    "term_days": 1,
+    "risk_level": "LOW",
+    "description": "Produto conservador com liquidez diaria para reserva.",
+    "is_active": true
+  },
+  {
+    "name": "Tesouro Prefixado 2029",
+    "product_type": "TESOURO",
+    "annual_rate": "10.8000",
+    "minimum_initial_amount": "50.00",
+    "term_days": 365,
+    "risk_level": "LOW",
+    "description": "Titulo publico para horizonte de medio prazo.",
+    "is_active": true
+  },
+  {
+    "name": "Fundo CDI Premium",
+    "product_type": "CDI_FUND",
+    "annual_rate": "11.3000",
+    "minimum_initial_amount": "500.00",
+    "term_days": 30,
+    "risk_level": "MEDIUM",
+    "description": "Fundo referenciado CDI para diversificacao inicial.",
+    "is_active": true
+  },
+  {
+    "name": "LCI Planejada 2028",
+    "product_type": "LCI",
+    "annual_rate": "10.1000",
+    "minimum_initial_amount": "300.00",
+    "term_days": 180,
+    "risk_level": "LOW",
+    "description": "Produto isento para metas de medio prazo.",
+    "is_active": true
+  }
+]

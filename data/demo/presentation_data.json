@@ -1,0 +1,86 @@
+{
+  "users": [
+    {
+      "key": "alice_demo",
+      "full_name": "Alice Demo",
+      "email": "alice.demo@ifbank.local",
+      "password": "SenhaForte123!",
+      "cpf": "16899535009",
+      "phone": "11999990001",
+      "birth_date": "1995-05-10",
+      "accounts": [
+        {
+          "key": "alice_main",
+          "account_type": "CHECKING",
+          "initial_balance": "2500.00",
+          "operations": [
+            {
+              "type": "deposit",
+              "amount": "450.00",
+              "description": "Recebimento de bolsa academica"
+            },
+            {
+              "type": "withdraw",
+              "amount": "180.00",
+              "description": "Pagamento de conta de energia"
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "title": "Reserva de emergencia",
+          "target_amount": "10000.00",
+          "current_amount": "3200.00",
+          "deadline": "2027-12-20"
+        }
+      ]
+    },
+    {
+      "key": "bruno_demo",
+      "full_name": "Bruno Demo",
+      "email": "bruno.demo@ifbank.local",
+      "password": "SenhaForte456!",
+      "cpf": "71460238001",
+      "phone": "11999990002",
+      "birth_date": "1993-08-21",
+      "accounts": [
+        {
+          "key": "bruno_main",
+          "account_type": "SAVINGS",
+          "initial_balance": "1800.00",
+          "operations": [
+            {
+              "type": "deposit",
+              "amount": "200.00",
+              "description": "Aporte inicial de demonstracao"
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "title": "Viagem de formatura",
+          "target_amount": "6000.00",
+          "current_amount": "1400.00",
+          "deadline": "2027-09-30"
+        }
+      ]
+    }
+  ],
+  "transfers": [
+    {
+      "from_account": "alice_main",
+      "to_account": "bruno_main",
+      "amount": "250.00",
+      "description": "Transferencia de demonstracao"
+    }
+  ],
+  "investments": [
+    {
+      "account": "alice_main",
+      "product_name": "CDB Liquidez Diaria",
+      "amount": "800.00"
+    }
+  ]
+}
