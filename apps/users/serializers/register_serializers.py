@@ -1,7 +1,8 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from apps.users.models import User
-from apps.users.validators import normalize_cpf
+from apps.users.validators import normalize_cpf, normalize_email, validate_birth_date, validate_phone
 
 
 class RegisterInputSerializer(serializers.Serializer):
@@ -14,19 +15,34 @@ class RegisterInputSerializer(serializers.Serializer):
     birth_date = serializers.DateField(required=False, allow_null=True)
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("A user with this email already exists.")
-        return value
+        normalized_value = normalize_email(value)
+        if User.objects.filter(email__iexact=normalized_value).exists():
+            raise serializers.ValidationError("Ja existe um usuario com este email.")
+        return normalized_value
 
     def validate_cpf(self, value):
         normalized_value = normalize_cpf(value)
         if normalized_value and User.objects.filter(cpf=normalized_value).exists():
-            raise serializers.ValidationError("A user with this CPF already exists.")
+            raise serializers.ValidationError("Ja existe um usuario com este CPF.")
         return normalized_value
+
+    def validate_phone(self, value):
+        try:
+            validate_phone(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.messages[0]) from exc
+        return value
+
+    def validate_birth_date(self, value):
+        try:
+            validate_birth_date(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.messages[0]) from exc
+        return value
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password_confirm"]:
-            raise serializers.ValidationError({"password_confirm": "Passwords do not match."})
+            raise serializers.ValidationError({"password_confirm": "As senhas nao coincidem."})
         return attrs
 
 

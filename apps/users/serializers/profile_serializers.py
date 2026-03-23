@@ -1,7 +1,8 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from apps.users.models import User
-from apps.users.validators import normalize_cpf
+from apps.users.validators import normalize_cpf, validate_birth_date, validate_phone
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -20,5 +21,19 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         user = self.instance
         normalized_value = normalize_cpf(value)
         if normalized_value and User.objects.exclude(id=user.id).filter(cpf=normalized_value).exists():
-            raise serializers.ValidationError("A user with this CPF already exists.")
+            raise serializers.ValidationError("Ja existe um usuario com este CPF.")
         return normalized_value
+
+    def validate_phone(self, value):
+        try:
+            validate_phone(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.messages[0]) from exc
+        return value
+
+    def validate_birth_date(self, value):
+        try:
+            validate_birth_date(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.messages[0]) from exc
+        return value

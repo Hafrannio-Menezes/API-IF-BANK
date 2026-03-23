@@ -98,6 +98,8 @@ if (-not $systemPython) {
 
 $venvPath = Join-Path $script:ProjectRoot ".venv"
 $script:VenvPython = Join-Path $venvPath "Scripts\\python.exe"
+$requirementsPath = Join-Path $script:ProjectRoot "requirements.txt"
+$requirementsMarker = Join-Path $venvPath "requirements.sha256"
 
 if (-not (Test-Path $script:VenvPython)) {
     Write-Step "Criando ambiente virtual"
@@ -107,7 +109,20 @@ if (-not (Test-Path $script:VenvPython)) {
     }
 }
 
-Invoke-ProjectCommand -Description "Instalando dependencias" -Arguments @("-m", "pip", "install", "-r", "requirements.txt")
+$requirementsHash = (Get-FileHash $requirementsPath -Algorithm SHA256).Hash
+$installedRequirementsHash = ""
+
+if (Test-Path $requirementsMarker) {
+    $installedRequirementsHash = (Get-Content $requirementsMarker -Raw).Trim()
+}
+
+if ($installedRequirementsHash -ne $requirementsHash) {
+    Invoke-ProjectCommand -Description "Instalando dependencias" -Arguments @("-m", "pip", "install", "-r", "requirements.txt")
+    Set-Content -Path $requirementsMarker -Value $requirementsHash
+}
+else {
+    Write-Step "Dependencias ja estao atualizadas"
+}
 
 $settingsModule = "config.settings.test"
 $environmentLabel = "test (SQLite local)"

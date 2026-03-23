@@ -2,6 +2,7 @@ from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from common.throttling import AuthRateThrottle
 from apps.users.serializers import (
@@ -16,6 +17,7 @@ from apps.users.services.user_service import authenticate_user, generate_tokens_
 
 
 class RegisterView(APIView):
+    authentication_classes = []
     permission_classes = [permissions.AllowAny]
     throttle_classes = [AuthRateThrottle]
 
@@ -50,6 +52,7 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
+    authentication_classes = []
     permission_classes = [permissions.AllowAny]
     throttle_classes = [AuthRateThrottle]
 
@@ -70,3 +73,8 @@ class LoginView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class PublicTokenRefreshView(TokenRefreshView):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]

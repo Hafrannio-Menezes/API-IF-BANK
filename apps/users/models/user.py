@@ -1,17 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
 from apps.users.models.managers import UserManager
-from apps.users.validators.cpf import normalize_cpf, validate_cpf
+from apps.users.validators import normalize_cpf, normalize_email, validate_birth_date, validate_cpf, validate_phone
 from common.utils.models import TimeStampedModel
-
-
-phone_validator = RegexValidator(
-    regex=r"^\+?[0-9()\-\s]{10,20}$",
-    message="Enter a valid phone number.",
-)
 
 
 class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
@@ -23,10 +16,10 @@ class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True,
         validators=[validate_cpf],
-        help_text="Optional CPF for academic validation scenarios.",
+        help_text="CPF opcional para cenarios academicos e demonstracoes.",
     )
-    phone = models.CharField(max_length=20, blank=True, validators=[phone_validator])
-    birth_date = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=20, blank=True, validators=[validate_phone])
+    birth_date = models.DateField(null=True, blank=True, validators=[validate_birth_date])
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -45,5 +38,6 @@ class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def save(self, *args, **kwargs):
+        self.email = normalize_email(self.email)
         self.cpf = normalize_cpf(self.cpf)
         return super().save(*args, **kwargs)

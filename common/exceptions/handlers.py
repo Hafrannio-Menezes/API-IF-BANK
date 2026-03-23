@@ -9,7 +9,7 @@ def custom_exception_handler(exc, context):
     detail = response.data.get("detail") if isinstance(response.data, dict) else None
     response.data = {
         "success": False,
-        "message": detail or "Request could not be processed.",
+        "message": str(detail) if detail else "Nao foi possivel processar a requisicao.",
         "errors": response.data,
     }
     return response
